@@ -1,0 +1,21 @@
+{
+  "name": "roma-candlelight",
+  "version": "1.0.0",
+  "description": "A cinematic Italian trattoria website with immersive menu browsing, animated reservations, family heritage storytelling, gallery, reviews, maps, and an evening dining mode.",
+  "type": "module",
+  "scripts": {
+    "start": "npm run dev",
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "vite": "^7.3.0",
+    "@vitejs/plugin-react": "^5.1.0",
+    "tailwindcss": "^4.2.0",
+    "@tailwindcss/vite": "^4.2.0"
+  }
+}
