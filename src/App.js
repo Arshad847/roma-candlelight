@@ -34,7 +34,10 @@ function ScrollToTopOnRoute() {
 
 export function App() {
   const route = useHashRoute();
-  const [darkMode, setDarkMode] = React.useState(false);
+  const [darkMode, setDarkMode] = React.useState(() => {
+    const hour = new Date().getHours();
+    return hour >= 18 || hour < 7; // Auto-enable dark mode between 6 PM and 7 AM
+  });
 
   React.useEffect(() => {
     document.documentElement.classList.toggle('dark', darkMode);
@@ -69,13 +72,13 @@ export function App() {
   };
 
   return html`
-    <div className="min-h-screen bg-[hsl(var(--background))] text-[hsl(var(--foreground))] selection:bg-[hsl(var(--primary)/0.25)]">
+    <div className="flex min-h-screen flex-col bg-[hsl(var(--background))] text-[hsl(var(--foreground))] selection:bg-[hsl(var(--primary)/0.25)]">
       <${ScrollToTopOnRoute} />
       <div className="steam steam-1"></div>
       <div className="steam steam-2"></div>
       <div className="steam steam-3"></div>
       <${Header} route=${route} darkMode=${darkMode} onToggleDark=${() => setDarkMode(!darkMode)} />
-      <main>${renderPage()}</main>
+      <main className="flex-1">${renderPage()}</main>
       <${Footer} />
       <a href="#/reserve" className="mobile-booking-bar md:hidden">Reserve a Table</a>
     </div>

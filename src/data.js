@@ -14,7 +14,8 @@ export const menuCategories = [
         wine: 'Frascati Superiore',
         origin: 'Puglia',
         chefNote: 'Served slightly cool so the cream opens slowly over warm toast.',
-        price: '18'
+        price: '18',
+        image: 'https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb?w=600'
       },
       {
         id: 'carciofi',
@@ -25,7 +26,8 @@ export const menuCategories = [
         wine: 'Vermentino di Gallura',
         origin: 'Lazio',
         chefNote: 'A springtime classic from our grandmother’s Sunday table.',
-        price: '16'
+        price: '16',
+        image: 'https://images.unsplash.com/photo-1574484284002-952d92456975?w=600'
       },
       {
         id: 'polpette',
@@ -36,7 +38,8 @@ export const menuCategories = [
         wine: 'Chianti Classico',
         origin: 'Tuscany',
         chefNote: 'Slow-simmered for three hours for a silkier tomato finish.',
-        price: '19'
+        price: '19',
+        image: 'https://images.unsplash.com/photo-1529042410759-befb1204b468?w=600'
       }
     ]
   },
@@ -55,7 +58,8 @@ export const menuCategories = [
         wine: 'Lugana DOC',
         origin: 'Rome',
         chefNote: 'Pepper is bloomed at the last second to perfume the entire bowl.',
-        price: '24'
+        price: '24',
+        image: 'https://images.unsplash.com/photo-1612874742237-6526221588e3?w=600'
       },
       {
         id: 'amatriciana',
@@ -66,7 +70,8 @@ export const menuCategories = [
         wine: 'Montepulciano d’Abruzzo',
         origin: 'Amatrice',
         chefNote: 'We render guanciale until the edges turn amber and glassy.',
-        price: '26'
+        price: '26',
+        image: 'https://images.unsplash.com/photo-1598866594230-a7c12756260f?w=600'
       },
       {
         id: 'pesto',
@@ -77,7 +82,8 @@ export const menuCategories = [
         wine: 'Pigato Riviera Ligure',
         origin: 'Liguria',
         chefNote: 'Pounded in small batches to keep the basil bright instead of bruised.',
-        price: '23'
+        price: '23',
+        image: 'https://images.unsplash.com/photo-1473093295043-cdd812d0e601?w=600'
       }
     ]
   },
@@ -96,7 +102,8 @@ export const menuCategories = [
         wine: 'Etna Bianco',
         origin: 'Sicily',
         chefNote: 'Finished over olive wood for a whisper of smoke.',
-        price: '34'
+        price: '34',
+        image: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=600'
       },
       {
         id: 'osso',
@@ -107,7 +114,8 @@ export const menuCategories = [
         wine: 'Barbera d’Asti',
         origin: 'Lombardy',
         chefNote: 'Cooked low and slow until the marrow enriches the sauce naturally.',
-        price: '38'
+        price: '38',
+        image: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=600'
       },
       {
         id: 'pizza',
@@ -118,7 +126,8 @@ export const menuCategories = [
         wine: 'Nero d’Avola',
         origin: 'Campania',
         chefNote: 'The crust blisters in 90 seconds inside our oak-fired dome.',
-        price: '22'
+        price: '22',
+        image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=600'
       }
     ]
   },
@@ -137,7 +146,8 @@ export const menuCategories = [
         wine: 'Vin Santo',
         origin: 'Veneto',
         chefNote: 'Set overnight so the coffee and mascarpone melt into one texture.',
-        price: '14'
+        price: '14',
+        image: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=600'
       },
       {
         id: 'panna',
@@ -148,7 +158,8 @@ export const menuCategories = [
         wine: 'Moscato d’Asti',
         origin: 'Piedmont',
         chefNote: 'The custard is barely set for a soft spoonful wobble.',
-        price: '13'
+        price: '13',
+        image: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=600'
       }
     ]
   }

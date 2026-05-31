@@ -4,106 +4,62 @@ import { html } from './jsx.js';
 import { Providers } from './mainProviders.js';
 import { App } from './App.js';
 
-// Firebase SDK imports from esm.sh for better compatibility in ESM environments
-import { initializeApp } from "https://esm.sh/firebase@11.1.0/app";
-import { getAnalytics } from "https://esm.sh/firebase@11.1.0/analytics";
-import { getDatabase, ref, push, set } from "https://esm.sh/firebase@11.1.0/database";
-
-// Firebase credentials for roma-candelia project
-const firebaseConfig = {
-  apiKey: "AIzaSyAijw0yYDJTBPYtcWPm1OAGzWwurWHlnRU",
-  authDomain: "roma-candelia.firebaseapp.com",
-  databaseURL: "https://roma-candelia-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "roma-candelia",
-  storageBucket: "roma-candelia.firebasestorage.app",
-  messagingSenderId: "797525250869",
-  appId: "1:797525250869:web:da5b7e4d478648905d727c",
-  measurementId: "G-ZM3CCR0E35"
-};
-
-let database = null;
-let analytics = null;
-
-try {
-  const app = initializeApp(firebaseConfig);
-  
-  // Initialize Database using the explicit URL for the regional instance
-  database = getDatabase(app, firebaseConfig.databaseURL);
-  
-  // Initialize Analytics
-  try {
-    analytics = getAnalytics(app);
-  } catch (analyticsError) {
-    console.warn("Firebase Analytics could not be initialized:", analyticsError);
-  }
-} catch (e) {
-  console.error("Firebase initialization failed:", e);
-}
+// Supabase credentials for roma-candlelight project
+const SUPABASE_URL = 'https://hyvwamfyqtjvihrbcjhx.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh5dndhbWZ5cXRqdmlocmJjamh4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY5NDM2NjMsImV4cCI6MjA5MjUxOTY2M30.M1LOmY9QmfRH200KPVyfpTMdj7lm5Y1bWEks8kylfIE';
 
 /**
- * Generic function to add a booking to the Realtime Database.
- * Directly writes to the live Firebase instance.
+ * Function to add a booking to Supabase.
  */
 export async function addBooking(data = null) {
-  if (!database) {
-    const error = new Error("Database not initialized. Check Firebase configuration.");
-    console.error(error);
-    throw error;
-  }
+  const bookingData = data || {
+    customer_name: "Test Guest",
+    customer_email: "test@example.com",
+    customer_phone: "+39 000 000 000",
+    number_of_guests: 2,
+    reservation_note: "Test booking",
+    selected_time_id: "t1",
+    selected_time: "20:00",
+    selected_table_id: "A1",
+    selected_table_name: "Test Table",
+    extras: [],
+    status: "pending"
+  };
 
   try {
-    // Reference the 'reservations' node
-    const reservationsListRef = ref(database, 'reservations');
-    
-    // Create a new location with a unique key
-    const newReservationRef = push(reservationsListRef);
-    
-    const bookingData = data || {
-      customerName: "Test Guest",
-      date: "Tonight",
-      time: "20:00",
-      guests: 2,
-      status: "pending",
-      table: "T-TEST",
-      timestamp: new Date().toISOString(),
-      isTest: true
-    };
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/reservations`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify(bookingData)
+    });
 
-    // Attempt to write the data
-    await set(newReservationRef, bookingData);
-    console.log("Reservation successfully recorded. ID:", newReservationRef.key);
-    
-    // Feedback for the 'Test Backend' button
-    if (!data) {
-      alert("Success! Real reservation added to Firebase.\nPath: /reservations/" + newReservationRef.key);
+    if (!response.ok) {
+      const error = await response.text();
+      throw new Error(error);
     }
-    
-    return newReservationRef.key;
-  } catch (e) {
-    console.error("Firebase Database Error:", e);
-    
-    // User-friendly feedback for write failures (often security rules)
+
+    console.log("Reservation successfully saved to Supabase!");
+
     if (!data) {
-       alert("Database Write Failed: " + e.message + "\n\nPlease ensure your Security Rules are set to test mode.");
+      alert("Success! Test reservation saved to Supabase!");
+    }
+
+  } catch (e) {
+    console.error("Supabase Error:", e);
+    if (!data) {
+      alert("Failed to save reservation: " + e.message);
     }
     throw e;
   }
 }
 
-// Attach listener to the test button in index.html
-const testButton = document.getElementById('testBackendButton');
-if (testButton) {
-  testButton.addEventListener('click', () => {
-    addBooking().catch(err => {
-      console.error("Test booking failed:", err);
-    });
-  });
-}
-
-// Expose functions globally for legacy or external access
+// Expose functions globally
 window.addBooking = addBooking;
-window.addTestBooking = addBooking;
-export const addTestBooking = addBooking;
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   html`<${Providers}><${App} /></${Providers}>`

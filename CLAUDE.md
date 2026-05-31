@@ -1,10 +1,10 @@
 # Roma Candlelight
-Cinematic Italian trattoria website with immersive menu browsing, Firebase-backed reservations, heritage storytelling, reviews, maps, and evening dining mode.
+Cinematic Italian trattoria website with immersive menu browsing, Supabase-backed reservations, heritage storytelling, reviews, maps, and evening dining mode.
 
 ## Masterplan
 - Make visitors feel like they have entered a candlelit Roman trattoria using terracotta, wine-red, olive, cream, parchment textures, faux film ambience, serif typography, glow effects, and floating steam.
 - Help diners explore before booking through illustrated course tabs, dish cards, ingredients, dietary/spice indicators, regional origins, chef notes, and wine pairings.
-- Make reservations feel visual and immediate with peak-time indicators, dining-room table selection, occasion extras, loading/confirmation states, and Firebase persistence.
+ - Make reservations feel visual and immediate with peak-time indicators, dining-room table selection, occasion extras, loading/confirmation states, and Supabase persistence.
 - Keep restaurant content editable from `src/data.js`; do not add a CMS unless menu, review, gallery, or reservation seed data outgrows static arrays.
 - Keep booking reachable from hero CTA, header CTA, menu CTA, `#/reserve`, and the mobile sticky booking bar.
 
@@ -14,12 +14,12 @@ Cinematic Italian trattoria website with immersive menu browsing, Firebase-backe
 - **Styling:** Tailwind CDN is loaded in `index.html`; custom theme, animations, dark mode, table grid, postcard/gallery art, map card, and mobile booking bar live in `styles/main.css`.
 - **Fonts:** Google Fonts in `index.html`: `Cormorant Garamond` for display/restaurant voice and `Inter` for UI/body.
 - **Icons:** `lucide-react` imported from esm.sh in each component with `?deps=react@19.2.0`; preserve the React dependency pin when adding icons.
-- **Backend:** Firebase JS SDK is initialized in `src/main.js`. `ReservationSection.js` imports `addBooking()` from `src/main.js` and writes reservation objects to Firebase Realtime Database.
+- **Backend:** Supabase REST API is utilized in `src/main.js`. `ReservationSection.js` imports `addBooking()` from `src/main.js` and writes reservation objects to the `reservations` table.
 - **Providers:** `src/mainProviders.js` currently returns a `React.Fragment`; put any future app-wide providers there rather than wrapping inside `src/App.js`.
 
 ### How files connect
-- `index.html` is the static shell. It loads Tailwind, fonts, `styles/main.css`, defines `#root`, includes the fixed `#testBackendButton`, and imports `src/main.js` as an ES module.
-- `src/main.js` initializes Firebase, exports `addBooking()`, wires the backend test button, and renders `<Providers><App /></Providers>`.
+- `index.html` is the static shell. It loads Tailwind, fonts, `styles/main.css`, defines `#root`, and imports `src/main.js` as an ES module.
+- `src/main.js` configures Supabase, exports `addBooking()`, and renders `<Providers><App /></Providers>`.
 - `src/jsx.js` binds `htm` to React `createElement` and exports `html`.
 - `src/App.js` owns hash routing, route page composition, evening-mode state, scroll reset, global steam elements, `Header`, `Footer`, and `.mobile-booking-bar`.
 - `src/data.js` is the app content source for menu categories/items, reservation time/table seed data, story cards, gallery cards, and reviews.
@@ -43,8 +43,9 @@ Cinematic Italian trattoria website with immersive menu browsing, Firebase-backe
 ## File Structure
 ```text
 index.html                         Static shell; Tailwind/font/CSS imports, #root, fixed #testBackendButton, src/main.js module.
+index.html                         Static shell; Tailwind/font/CSS imports, #root, src/main.js module.
 styles/main.css                    Theme variables, dark mode, cinematic effects, steam, hero film, table grid, gallery/postcard art, map card, mobile booking bar.
-src/main.js                        React root render; Firebase initialization; exports addBooking(); test backend button wiring.
+src/main.js                        React root render; Firebase initialization; exports addBooking().
 src/jsx.js                         htm binding; import html from here for every component template.
 src/mainProviders.js               App-wide provider wrapper; currently a React.Fragment only.
 src/App.js                         Hash router, page composition, evening mode, scroll reset, global steam, sticky mobile booking CTA.
@@ -52,7 +53,7 @@ src/data.js                        Static restaurant content: menuCategories, re
 src/components/Header.js           Sticky nav, active route styling, evening-mode toggle, mobile drawer, reserve CTA.
 src/components/Hero.js             Full-screen cinematic landing section with film overlay, glow CTA, menu CTA, ambience cards.
 src/components/MenuSection.js      Course/category tabs, dish cards, dietary/spice icons, wine/origin data, chef-note hover reveal.
-src/components/ReservationSection.js Reservation UI, table/time/extras form state, Firebase submission via addBooking().
+src/components/ReservationSection.js Reservation UI, table/time/extras form state, Supabase submission via addBooking().
 src/components/StorySection.js     Chef/family/imported-ingredient storytelling from storyCards.
 src/components/GallerySection.js   Vintage postcard album cards from galleryCards.
 src/components/ReviewsSection.js   Auto-advancing/manual reviews carousel from reviews.
@@ -111,13 +112,13 @@ CLAUDE.md                          Project documentation for coding agents; keep
 
 ```js
 {
-  customerName,
-  numberOfGuests,
-  reservationNote,
-  selectedTimeId,
-  selectedTime,
-  selectedTableId,
-  selectedTableName,
+  customer_name,
+  number_of_guests,
+  reservation_note,
+  selected_time_id,
+  selected_time,
+  selected_table_id,
+  selected_table_name,
   extras,
   status: "pending",
   timestamp
@@ -132,7 +133,6 @@ CLAUDE.md                          Project documentation for coding agents; keep
 ### Firebase backend
 - `src/main.js` owns Firebase initialization and exports `addBooking()`.
 - `ReservationSection.js` depends on that export, which means `main.js` is both bootstrap and a lightweight backend service module. Be careful with circular imports; do not import components into `main.js`.
-- The fixed `#testBackendButton` in `index.html` is wired by `src/main.js` and is intentionally unique to avoid conflicting with user-facing reservation CTAs.
 - API surface for app code:
   - `addBooking(reservationData): Promise` — writes a reservation/booking object to Firebase Realtime Database.
 - Firebase writes should remain isolated to `src/main.js` unless a dedicated service module is introduced.
@@ -187,7 +187,7 @@ CLAUDE.md                          Project documentation for coding agents; keep
   3. Keep state local unless multiple unrelated sections truly need it.
   4. Add CSS effect classes to `styles/main.css` only when Tailwind utilities are insufficient.
 - To add icons, import from `https://esm.sh/lucide-react?deps=react@19.2.0` in the component using them.
-- Preserve the fixed `#testBackendButton` ID and the main reservation CTAs; they serve different purposes.
+- Preserve the main reservation CTAs.
 
 ## Platform (GenMB)
 

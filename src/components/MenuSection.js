@@ -1,6 +1,6 @@
 import React from 'https://esm.sh/react@19.2.0';
 import { html } from '../jsx.js';
-import {Flame, Leaf, WheatOff, Wine, MapPinned, ChefHat} from 'https://esm.sh/lucide-react?deps=react@19.2.0';
+import {Flame, Leaf, WheatOff, Wine, MapPinned, ChefHat, Search, Filter} from 'https://esm.sh/lucide-react?deps=react@19.2.0';
 import { menuCategories } from '../data.js';
 
 function DietaryBadge({ type }) {
@@ -26,6 +26,11 @@ function SpiceMeter({ level }) {
 function MenuCard({ item }) {
   return html`
     <div className="menu-card group relative overflow-hidden rounded-[var(--radius-lg)] border border-[hsl(var(--border))] bg-[linear-gradient(180deg,hsl(var(--card)),hsl(var(--secondary)/0.25))] p-5 shadow-[var(--shadow-sm)] transition duration-500 hover:-translate-y-1 hover:shadow-[var(--shadow-lg)]">
+      ${item.image && html`
+        <div className="mb-5 -mx-5 -mt-5 h-48 overflow-hidden">
+          <img src=${item.image} alt=${item.name} className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
+        </div>
+      `}
       <div className="flex items-start justify-between gap-3">
         <div>
           <h3 className="font-serif text-3xl leading-tight">${item.name}</h3>
@@ -50,9 +55,9 @@ function MenuCard({ item }) {
         </div>
       </div>
 
-      <div className="pointer-events-none absolute inset-x-4 bottom-4 translate-y-6 rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--background)/0.95)] p-4 opacity-0 shadow-[var(--shadow-md)] transition duration-500 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100">
-        <div className="mb-1 inline-flex items-center gap-2 text-sm text-[hsl(var(--primary))]"><${ChefHat} size=${14} /> Chef Note</div>
-        <p className="text-sm leading-6 text-[hsl(var(--foreground)/0.82)]">${item.chefNote}</p>
+      <div className="mt-4 rounded-2xl border border-[hsl(var(--border)/0.7)] bg-[hsl(var(--background)/0.52)] p-3 text-sm">
+        <div className="mb-1 inline-flex items-center gap-2 font-medium text-[hsl(var(--primary))]"><${ChefHat} size=${14} /> Chef Note</div>
+        <p className="leading-6 text-[hsl(var(--foreground)/0.82)]">${item.chefNote}</p>
       </div>
     </div>
   `;
@@ -61,7 +66,17 @@ function MenuCard({ item }) {
 export function MenuSection({ standalone = false }) {
   const [active, setActive] = React.useState(menuCategories[0].id);
   const [loading, setLoading] = React.useState(false);
+  const [search, setSearch] = React.useState('');
+  const [dietFilter, setDietFilter] = React.useState('all');
+
   const current = menuCategories.find((cat) => cat.id === active);
+
+  const filteredItems = current.items.filter(item => {
+    const matchesSearch = item.name.toLowerCase().includes(search.toLowerCase()) || 
+                          item.ingredients.toLowerCase().includes(search.toLowerCase());
+    const matchesDiet = dietFilter === 'all' || item.dietary.includes(dietFilter);
+    return matchesSearch && matchesDiet;
+  });
 
   const switchTab = (id) => {
     setLoading(true);
@@ -90,18 +105,45 @@ export function MenuSection({ standalone = false }) {
         `)}
       </div>
 
-      <div className="fade-in mb-6 rounded-[var(--radius-lg)] border border-[hsl(var(--border))] bg-[hsl(var(--card)/0.86)] p-5 shadow-[var(--shadow-sm)]">
-        <div className="text-xs uppercase tracking-[0.28em] text-[hsl(var(--foreground)/0.55)]">${current.label}</div>
-        <p className="mt-2 max-w-3xl text-sm leading-7 text-[hsl(var(--foreground)/0.72)]">${current.description}</p>
+      <div className="fade-in mb-6 grid grid-cols-1 gap-4 lg:grid-cols-[1fr_auto]">
+        <div className="rounded-[var(--radius-lg)] border border-[hsl(var(--border))] bg-[hsl(var(--card)/0.86)] p-5 shadow-[var(--shadow-sm)]">
+          <div className="text-xs uppercase tracking-[0.28em] text-[hsl(var(--foreground)/0.55)]">${current.label}</div>
+          <p className="mt-2 max-w-3xl text-sm leading-7 text-[hsl(var(--foreground)/0.72)]">${current.description}</p>
+        </div>
+        
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+          <div className="relative">
+            <${Search} className="absolute left-4 top-1/2 -translate-y-1/2 text-[hsl(var(--foreground)/0.4)]" size=${16} />
+            <input 
+              value=${search} 
+              onInput=${(e) => setSearch(e.target.value)}
+              placeholder="Find ingredients..." 
+              className="w-full rounded-full border border-[hsl(var(--border))] bg-[hsl(var(--card))] py-3 pl-10 pr-4 text-sm outline-none transition focus:border-[hsl(var(--primary)/0.4)] sm:w-64" 
+            />
+          </div>
+          <div className="flex items-center gap-2 rounded-full border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-3 py-1.5">
+            <${Filter} size=${14} className="text-[hsl(var(--foreground)/0.5)]" />
+            <select 
+              value=${dietFilter} 
+              onChange=${(e) => setDietFilter(e.target.value)}
+              className="bg-transparent text-sm outline-none cursor-pointer"
+            >
+              <option value="all">All Dishes</option>
+              <option value="vegetarian">Vegetarian</option>
+              <option value="vegan">Vegan</option>
+              <option value="gluten-free">Gluten-Free</option>
+            </select>
+          </div>
+        </div>
       </div>
 
       ${loading ? html`
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
           ${[1, 2, 3].map((n) => html`<div key=${n} className="h-72 animate-pulse rounded-[var(--radius-lg)] border border-[hsl(var(--border))] bg-[hsl(var(--card))]"></div>`)}
         </div>
-      ` : current.items.length ? html`
+      ` : filteredItems.length ? html`
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
-          ${current.items.map((item) => html`<${MenuCard} key=${item.id} item=${item} />`)}
+          ${filteredItems.map((item) => html`<${MenuCard} key=${item.id} item=${item} />`)}
         </div>
       ` : html`
         <div className="rounded-[var(--radius-lg)] border border-dashed border-[hsl(var(--border))] bg-[hsl(var(--card)/0.65)] p-8 text-center">

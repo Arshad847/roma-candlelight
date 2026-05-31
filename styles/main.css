@@ -163,7 +163,7 @@ h3 {
 
 .fade-in {
   opacity: 0;
-  transform: translateY(26px);
+  transform: translateY(12px);
   animation: fadeInUp 0.9s ease forwards;
   animation-timeline: view();
   animation-range: entry 10% cover 32%;
