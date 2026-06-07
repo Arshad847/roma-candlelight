@@ -5,9 +5,8 @@ import { Hero } from './components/Hero.js';
 import { MenuSection } from './components/MenuSection.js';
 import { ReservationSection } from './components/ReservationSection.js';
 import { StorySection } from './components/StorySection.js';
-import { GallerySection } from './components/GallerySection.js';
-import { ReviewsSection } from './components/ReviewsSection.js';
 import { VisitSection } from './components/VisitSection.js';
+import { AdminPanel } from './components/AdminPanel.js';
 import { Footer } from './components/Footer.js';
 
 function useHashRoute() {
@@ -56,8 +55,11 @@ export function App() {
     if (route === 'story') {
       return html`<div>
         <${StorySection} />
-        <${GallerySection} />
-        <${ReviewsSection} />
+      </div>`;
+    }
+    if (route === 'admin') {
+      return html`<div>
+        <${AdminPanel} />
       </div>`;
     }
     return html`<div>
@@ -65,8 +67,6 @@ export function App() {
       <${MenuSection} />
       <${ReservationSection} />
       <${StorySection} />
-      <${GallerySection} />
-      <${ReviewsSection} />
       <${VisitSection} />
     </div>`;
   };

@@ -212,10 +212,10 @@ export const storyCards = [
 ];
 
 export const galleryCards = [
-  { id: 'g1', title: 'Roman Evenings', stamp: 'Roma Centro', note: 'Lantern glow, open shutters, and a late bottle uncorked.' },
-  { id: 'g2', title: 'Pasta Morning', stamp: 'Bottega', note: 'Sheets of dough drying before the lunch bell rings.' },
-  { id: 'g3', title: 'Pizza Fire', stamp: 'Forno', note: 'Oak embers and leopard-spotted crusts in ninety seconds.' },
-  { id: 'g4', title: 'Cellar Toast', stamp: 'Cantina', note: 'Barolo labels, candle wax, and soft brass jazz.' }
+  { id: 'g1', title: 'Roman Evenings', stamp: 'Roma Centro', note: 'Lantern glow, open shutters, and a late bottle uncorked.', image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800' },
+  { id: 'g2', title: 'Pasta Morning', stamp: 'Bottega', note: 'Sheets of dough drying before the lunch bell rings.', image: 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?w=800' },
+  { id: 'g3', title: 'Pizza Fire', stamp: 'Forno', note: 'Oak embers and leopard-spotted crusts in ninety seconds.', image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=800' },
+  { id: 'g4', title: 'Cellar Toast', stamp: 'Cantina', note: 'Barolo labels, candle wax, and soft brass jazz.', image: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=800' }
 ];
 
 export const reviews = [
